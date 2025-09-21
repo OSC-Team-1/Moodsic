@@ -1,7 +1,10 @@
 "use client";
 
 import { GoogleGenAI } from "@google/genai";
+import Image from "next/image";
 import { useState } from "react";
+import { FaHeadphones, FaSpotify } from "react-icons/fa6";
+import { TbMusicHeart } from "react-icons/tb";
 
 export default function Home() {
   const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY!;
@@ -132,7 +135,67 @@ export default function Home() {
   };
   return (
     <>
-      Current Mood {mood}
+      <button
+        className="absolute top-10 right-10 p-4 px-10 bg-white rounded-lg cursor-pointer"
+        style={{ boxShadow: "2px 2px 2px rgba(0,0,0,0.1)" }}
+      >
+        Sign in
+      </button>
+      <h1
+        className="text-center text-8xl font-bold text-[#5da8bf] mt-20"
+        style={{ textShadow: "2px 2px 2px rgba(0,0,0,0.4)" }}
+      >
+        Moody Tunes
+      </h1>
+      <div className="flex justify-center mt-32">
+        <div className="items-center justify-around flex">
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#e1f7ff] py-12">
+            <TbMusicHeart className="w-[12rem] h-[12rem]" />
+            <p className="text-center m-10 text-3xl font-semibold">Whateber mood your headrts in </p>
+          </div>
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#e1f7ff] py-12">
+            <FaSpotify className="w-[12rem] h-[12rem]" />
+            <p className="text-center m-10 text-3xl font-semibold">from spotify to you</p>
+          </div>
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#e1f7ff] py-12">
+            <FaHeadphones className="w-[12rem] h-[12rem]" />
+            <p className="text-center m-10 text-3xl font-semibold">Suggest to validate your feelings</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-32 left-0 right-0 flex justify-center">
+        <Image
+          src="/ChatGPT Image (1).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+        <Image
+          src="/ChatGPT Image (2).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+        <Image
+          src="/ChatGPT Image (4).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+        <Image
+          src="/ChatGPT Image (3).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+      </div>
+
+      {/* Current Mood {mood}
       <button onClick={() => initSpeechRecognition()} className="border-2 border-black m-10">
         CONNECT
       </button>
@@ -142,7 +205,7 @@ export default function Home() {
           backgroundColor: status === "listening" ? "green" : "red",
         }}
       />
-      <p>{status === "listening" ? "Listening..." : "Idle"}</p>
+      <p>{status === "listening" ? "Listening..." : "Idle"}</p> */}
     </>
   );
 }
