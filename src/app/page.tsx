@@ -9,6 +9,58 @@ export default function Home() {
   const [mood, setMood] = useState("Default Text");
   const ai = new GoogleGenAI({ apiKey: API_KEY });
 
+  function wait(delayInMS) {
+    return new Promise((resolve) => setTimeout(resolve, delayInMS));
+  }
+
+  function startRecording(stream, lengthInMS) {
+    let recorder = new MediaRecorder(stream);
+    let data = [];
+    recorder.ondataavailable = (event) => data.push(event.data);
+    recorder.start();
+    console.log(`${recorder.state} for ${lengthInMS / 1000} seconds…`);
+
+    let stopped = new Promise((resolve, reject) => {
+      recorder.onstop = resolve;
+      recorder.onerror = (event) => reject(event.name);
+    });
+
+    let recorded = wait(lengthInMS).then(() => {
+      if (recorder.state === "recording") {
+        recorder.stop();
+      }
+    });
+
+    return Promise.all([stopped, recorded]).then(() => data);
+  }
+
+  async function cam() {
+    const reader = new FileReader();
+    await navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        return startRecording(stream, 30000);
+      })
+      .then((recordedChunks) => {
+        //console.log(recordedChunks);
+        let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+        reader.readAsDataURL(recordedBlob);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return reader;
+  }
+
+  function test() {
+    cam().then((data) => {
+      data.onload = () => {
+        // base64 video is data.result
+        console.log(data.result);
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+
   const handleOnResult = async (voiceText: string) => {
     const prompt = `
         Input voice: "${voiceText}"
