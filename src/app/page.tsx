@@ -2,6 +2,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { FaHeadphones, FaSpotify } from "react-icons/fa6";
 import { TbMusicHeart } from "react-icons/tb";
@@ -9,7 +10,9 @@ import { TbMusicHeart } from "react-icons/tb";
 export default function Home() {
   const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY!;
   const [status, setStatus] = useState<"idle" | "listening">("idle");
+  const [auth, setAuth] = useState<"logged-in" | "not-logged-in">("not-logged-in");
   const [mood, setMood] = useState("Default Text");
+  const [currentSong, setCurrentSong] = useState("");
   const ai = new GoogleGenAI({ apiKey: API_KEY });
   const requestLength = 2500;
 
@@ -135,12 +138,25 @@ export default function Home() {
   };
   return (
     <>
-      <button
-        className="absolute top-10 right-10 p-4 px-10 bg-white rounded-lg cursor-pointer"
-        style={{ boxShadow: "2px 2px 2px rgba(0,0,0,0.1)" }}
-      >
-        Sign in
-      </button>
+      {auth == "logged-in" ? (
+        <Link
+          href={currentSong}
+          className="absolute top-10 right-10 p-4 px-6 bg-white rounded-lg cursor-pointer flex justify-around items-center"
+          style={{ boxShadow: "2px 2px 2px rgba(0,0,0,0.1)" }}
+          onClick={() => setAuth("logged-in")}
+        >
+          <FaSpotify className="w-[2rem] h-[2rem] mr-4" />
+          Spotify
+        </Link>
+      ) : (
+        <button
+          className="absolute top-10 right-10 p-4 px-10 bg-white rounded-lg cursor-pointer"
+          style={{ boxShadow: "2px 2px 2px rgba(0,0,0,0.1)" }}
+          onClick={() => setAuth("logged-in")}
+        >
+          Sign in
+        </button>
+      )}
       <h1
         className="text-center text-8xl font-bold text-[#5da8bf] mt-20"
         style={{ textShadow: "2px 2px 2px rgba(0,0,0,0.4)" }}
@@ -149,15 +165,15 @@ export default function Home() {
       </h1>
       <div className="flex justify-center mt-32">
         <div className="items-center justify-around flex">
-          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#e1f7ff] py-12">
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#EBF7FA] py-12 rounded-2xl">
             <TbMusicHeart className="w-[12rem] h-[12rem]" />
             <p className="text-center m-10 text-3xl font-semibold">Whateber mood your headrts in </p>
           </div>
-          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#e1f7ff] py-12">
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#EBF7FA] py-12 rounded-2xl">
             <FaSpotify className="w-[12rem] h-[12rem]" />
             <p className="text-center m-10 text-3xl font-semibold">from spotify to you</p>
           </div>
-          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#e1f7ff] py-12">
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#EBF7FA] py-12 rounded-2xl">
             <FaHeadphones className="w-[12rem] h-[12rem]" />
             <p className="text-center m-10 text-3xl font-semibold">Suggest to validate your feelings</p>
           </div>
