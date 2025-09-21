@@ -15,7 +15,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-spotify-embed": "^2.0.4",
-    "spotify-embed": "^1.6.6"
+    "spotify-embed": "^1.6.6",
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
