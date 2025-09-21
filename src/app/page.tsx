@@ -1,9 +1,14 @@
 "use client";
 
 import { GoogleGenAI } from "@google/genai";
+
 import { useState, useEffect } from "react";
 import { getUserInformation, getSongs, playTrack } from "./lib";
 import { SpotifyEmbed } from "spotify-embed"; // import the SpotifyEmbed component
+import Image from "next/image";
+import Link from "next/link";
+import { FaHeadphones, FaSpotify } from "react-icons/fa6";
+import { TbMusicHeart } from "react-icons/tb";
 
 export default function Home() {
     const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY!;
@@ -14,7 +19,8 @@ export default function Home() {
 
     const [artists, setArtists] = useState(["Rick Astley"]);
     const [tracks, setTracks] = useState(["Never gonna give you up"]);
-    const requestLength = 10_000;
+    const requestLength = 2500;
+    const [currentSong, setCurrentSong] = useState("");
 
     useEffect(() => {
         (async () => {
@@ -122,17 +128,6 @@ export default function Home() {
         return reader;
     }
 
-    cam()
-        .then((data) => {
-            data.onload = () => {
-                // base64 video is data.result
-                // console.log(data.result);
-            };
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-
     const handleOnResult = async (voiceText: string) => {
         let base64video: string | ArrayBuffer | null = "";
 
@@ -194,46 +189,93 @@ export default function Home() {
             });
     };
 
-    const initSpeechRecognition = () => {
-        const SpeechRecognition =
-            window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.lang = "en-US";
-        recognition.continuous = false;
+  return (
+    <>
+      {auth == "logged-in" ? (
+        <Link
+          href={currentSong}
+          className="absolute top-10 right-10 p-4 px-6 bg-white rounded-lg cursor-pointer flex justify-around items-center"
+          style={{ boxShadow: "2px 2px 2px rgba(0,0,0,0.1)" }}
+          onClick={() => setAuth("logged-in")}
+        >
+          <FaSpotify className="w-[2rem] h-[2rem] mr-4" />
+          Spotify
+        </Link>
+      ) : (
+        <button
+          className="absolute top-10 right-10 p-4 px-10 bg-white rounded-lg cursor-pointer"
+          style={{ boxShadow: "2px 2px 2px rgba(0,0,0,0.1)" }}
+          onClick={() => setAuth("logged-in")}
+        >
+          Sign in
+        </button>
+      )}
+      <h1
+        className="text-center text-8xl font-bold text-[#5da8bf] mt-20"
+        style={{ textShadow: "2px 2px 2px rgba(0,0,0,0.4)" }}
+      >
+        Moody Tunes
+      </h1>
+      <div className="flex justify-center mt-32">
+        <div className="items-center justify-around flex">
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#EBF7FA] py-12 rounded-2xl">
+            <TbMusicHeart className="w-[12rem] h-[12rem]" />
+            <p className="text-center m-10 text-3xl font-semibold">Whateber mood your headrts in </p>
+          </div>
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#EBF7FA] py-12 rounded-2xl">
+            <FaSpotify className="w-[12rem] h-[12rem]" />
+            <p className="text-center m-10 text-3xl font-semibold">from spotify to you</p>
+          </div>
+          <div className="h-[30rem] w-[20rem] mx-10 flex flex-col items-center bg-[#EBF7FA] py-12 rounded-2xl">
+            <FaHeadphones className="w-[12rem] h-[12rem]" />
+            <p className="text-center m-10 text-3xl font-semibold">Suggest to validate your feelings</p>
+          </div>
+        </div>
+      </div>
 
-        recognition.onstart = () => setStatus("listening");
-        recognition.onresult = (e) => {
-            handleOnResult(e.results[0][0].transcript);
-        };
-        recognition.onend = () => {
-            setTimeout(() => recognition.start(), requestLength);
-        };
-        recognition.onerror = (e) => {
-            console.error("Speech error:", e.error);
-            setStatus("idle");
-        };
+      <div className="absolute bottom-32 left-0 right-0 flex justify-center">
+        <Image
+          src="/ChatGPT Image (1).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+        <Image
+          src="/ChatGPT Image (2).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+        <Image
+          src="/ChatGPT Image (4).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+        <Image
+          src="/ChatGPT Image (3).png"
+          className="w-[5rem] h-[5rem] mx-8 object-cover rounded-lg"
+          alt=""
+          width={500}
+          height={500}
+        />
+      </div>
 
-        recognition.start();
-    };
-    return (
-        <>
-            Current Mood {mood}
-            <button
-                onClick={() => initSpeechRecognition()}
-                className="border-2 border-black m-10"
-            >
-                CONNECT
-            </button>
-            {songs.map((song, idx) => (
-                <SpotifyEmbed src={song} key={idx} />
-            ))}
-            <div
-                className="w-6 h-6 rounded-full mx-auto"
-                style={{
-                    backgroundColor: status === "listening" ? "green" : "red",
-                }}
-            />
-            <p>{status === "listening" ? "Listening..." : "Idle"}</p>
-        </>
-    );
+      {/* Current Mood {mood}
+      <button onClick={() => initSpeechRecognition()} className="border-2 border-black m-10">
+        CONNECT
+      </button>
+      <div
+        className="w-6 h-6 rounded-full mx-auto"
+        style={{
+          backgroundColor: status === "listening" ? "green" : "red",
+        }}
+      />
+      <p>{status === "listening" ? "Listening..." : "Idle"}</p> */}
+    </>
+  );
+
 }
