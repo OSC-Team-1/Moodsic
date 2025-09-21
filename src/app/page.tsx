@@ -114,7 +114,8 @@ export default function Home() {
             favourite genre and artist. The moods you are to choose from are "joyful", "calm", "excited", "sad", "angry", 
             "fearful", "disgusted", "surprised", "curious", "conflicted" respond with only the mood. If they are in between 
             two moods, decide concretely which one they are in, you are only allowed to pick from the list
-    
+              
+            // * get user data soon
             The user likes to listen to artist such as Billie Eilish Doja Cat Taylor Swift Lana Del Rey Laufey
             the user likes to listen to genres such as Indie Pop AfroBeats
             

@@ -1,6 +1,4 @@
-const token =
-  "BQCdVeY7ibB-GLOsGteb4Ys_3TqnrCj2gKs3o745plupkZ4ghFB0q8F1lMUj7g0bAs9OH2xqeBxa95vsGB_oT_tvRPHgdpOHlFu3_nbw9lLWrfT9OWrDrZu7UIRsjGoiQJXBAALKP-A";
-
+const token = process.env.API_TOKEN_SPOTIFY
 export async function getSongs(text:string) {
     text =
         text ||
